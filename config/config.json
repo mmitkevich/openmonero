@@ -20,7 +20,7 @@
     "port"     : 3306,
     "dbname"   : "openmonero",
     "user"     : "root",
-    "password" : "root"
+    "password" : "password"
   },
   "wallet_import" :
   {

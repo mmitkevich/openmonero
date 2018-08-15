@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.2)
+set(Boost_USE_MULTITHREADED ON)
 
 set(PROJECT_NAME
         openmonero)
@@ -6,7 +7,7 @@ set(PROJECT_NAME
 project(${PROJECT_NAME})
 
 set(CMAKE_CXX_FLAGS
-        "${CMAKE_CXX_FLAGS} -std=c++11")
+        "${CMAKE_CXX_FLAGS} -std=c++11 -fsanitize=address -fno-omit-frame-pointer")
 
 if(CMAKE_SIZEOF_VOID_P EQUAL "4")
   add_definitions(-DMDB_VL32)
@@ -22,7 +23,7 @@ set(MONERO_SOURCE_DIR ${MONERO_DIR}
         CACHE PATH "Path to the root directory for Monero")
 
 # set location of monero build tree
-set(MONERO_BUILD_DIR ${MONERO_SOURCE_DIR}/build/release/
+set(MONERO_BUILD_DIR ${MONERO_SOURCE_DIR}/build/
         CACHE PATH "Path to the build directory for Monero")
 
 set(MY_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake"
@@ -32,7 +33,7 @@ list(APPEND CMAKE_MODULE_PATH "${MY_CMAKE_DIR}")
 
 set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${MONERO_BUILD_DIR}"
         CACHE PATH "Add Monero directory for library searching")
-
+message(STATUS CMAKE_LIBRARY_PATH ": ${CMAKE_LIBRARY_PATH}")
 include(MyUtils)
 
 find_package(Monero)
@@ -93,10 +94,10 @@ set(LIBRARIES
         myxrm
         myext
         restbed
-        wallet
+        wallet_merged
         blockchain_db
         cryptonote_core
-        cryptonote_protocol
+        #cryptonote_protocol
         cryptonote_basic
         daemonizer
         cncrypto
@@ -105,7 +106,7 @@ set(LIBRARIES
         ringct
         ringct_basic
         common
-        mnemonics
+        #mnemonics
         epee
         easylogging
         mysqlpp
@@ -114,7 +115,6 @@ set(LIBRARIES
         epee
         checkpoints
         version
-        pcsclite
         ${Boost_LIBRARIES}
         pthread
         unbound
@@ -127,7 +127,7 @@ set(LIBRARIES
 if(APPLE)
     set(LIBRARIES ${LIBRARIES} "-framework IOKit -framework PCSC")
 else()
-    set(LIBRARIES ${LIBRARIES} atomic)
+    set(LIBRARIES ${LIBRARIES} atomic pcsclite)
 endif()
 
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin" AND NOT WIN32)

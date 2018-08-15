@@ -27,10 +27,11 @@
 #
 # (c) 2014-2016 cpp-ethereum contributors.
 #------------------------------------------------------------------------------
-
-set(LIBS common;blocks;cryptonote_basic;cryptonote_core;
-		cryptonote_protocol;daemonizer;mnemonics;epee;lmdb;device;
-		blockchain_db;ringct;wallet;cncrypto;easylogging;version;checkpoints)
+SET(CMAKE_FIND_LIBRARY_SUFFIXES .a)
+#cryptonote_protocol;mnemonics;
+set(LIBS common;blocks;cryptonote_basic;cryptonote_core;unbound;
+		daemonizer;epee;lmdb;device;
+		blockchain_db;ringct;wallet_merged;cncrypto;easylogging;version;checkpoints)
 
 set(Xmr_INCLUDE_DIRS "${CPP_MONERO_DIR}")
 
@@ -44,7 +45,7 @@ foreach (l ${LIBS})
 	find_library(Xmr_${L}_LIBRARY
 			NAMES ${l}
 			PATHS ${CMAKE_LIBRARY_PATH}
-			PATH_SUFFIXES "/src/${l}" "/src/" "/external/db_drivers/lib${l}" "/lib" "/src/crypto" "/contrib/epee/src" "/external/easylogging++/"
+			PATH_SUFFIXES "/src/${l}" "/src/" "/external/db_drivers/lib${l}" "/lib" "/src/crypto" "/contrib/epee/src" "/external/easylogging++/" "/external/unbound"
 			NO_DEFAULT_PATH
 			)
 
