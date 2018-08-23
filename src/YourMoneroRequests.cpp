@@ -112,7 +112,8 @@ YourMoneroRequests::login(const shared_ptr<Session> session, const Bytes & body)
         if ((acc_id = xmr_accounts->insert(xmr_address,
                                            make_hash(view_key),
                                            blk_timestamp_mysql_format,
-                                           current_blockchain_height)) == 0)
+                                           0//current_blockchain_height
+                                           )) == 0)
         {
             // if creating account failed
             j_response = json {{"status", "error"},
